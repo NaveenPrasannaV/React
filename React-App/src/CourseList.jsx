@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Course from "./Course";
+import loading from "../../data/assets/loading.gif";
 
 function CourseList(){
 
@@ -7,13 +8,24 @@ function CourseList(){
 
     const [courseList, setCourseList] = useState();
 
+    const [error, setError] = useState(null);
+
     useEffect(()=>{
-        fetch('http://localhost:3000/courses')
-        .then(response => {
-            console.log(response)
-            return response.json()
-        })
-        .then(data => setCourseList(data))
+        setTimeout(() => {
+            fetch('http://localhost:3000/courses')
+            .then(response => {
+                if(!response.ok){
+                    throw Error("couldn't retrive data")
+                }
+                console.log(response)
+                return response.json()
+            })
+            .then(data => setCourseList(data))
+            .catch((error) => {
+                console.log(error.message);
+                setError(error.message);
+            })
+        } , 2000)
     } , []);
 
     function handleDelete(id){
@@ -24,7 +36,12 @@ function CourseList(){
    //courseList.sort((x,y) => (x.price-y.price));
 
     if(!courseList){
-        return<></>
+        return(
+            <>
+                {!error && <img src={loading} alt="Loading..." style={{width: "200px", height: "200px"}}/>}
+                {error && <p>{error}</p>}
+            </>
+        )
    }
  
 
