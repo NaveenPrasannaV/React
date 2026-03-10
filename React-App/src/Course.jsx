@@ -31,7 +31,7 @@ function Course(props){
 
 }
 
-Course.PropTypes = {
+Course.propTypes = {
     name : PropTypes.string,
     rating : PropTypes.number,
     show : PropTypes.bool
