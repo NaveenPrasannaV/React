@@ -1,32 +1,11 @@
 import { useEffect, useState } from "react";
 import Course from "./Course";
 import loading from "../../data/assets/loading.gif";
+import useFetch from "./useFetch";
 
 function CourseList(){
 
-    const [dummy, setDummy] = useState(true);
-
-    const [courseList, setCourseList] = useState();
-
-    const [error, setError] = useState(null);
-
-    useEffect(()=>{
-        setTimeout(() => {
-            fetch('http://localhost:3000/courses')
-            .then(response => {
-                if(!response.ok){
-                    throw Error("couldn't retrive data")
-                }
-                console.log(response)
-                return response.json()
-            })
-            .then(data => setCourseList(data))
-            .catch((error) => {
-                console.log(error.message);
-                setError(error.message);
-            })
-        } , 2000)
-    } , []);
+    const [courseList, dummy, error] = useFetch('http://localhost:3000/courses');
 
     function handleDelete(id){
         console.log(id);
